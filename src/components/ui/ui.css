@@ -1,0 +1,277 @@
+/* Primitives: Card, Badge, Chip, StatTile, ScoreGauge, Button, states. */
+
+/* ---- Card ------------------------------------------------------------- */
+.card {
+  background: var(--surface-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.card__body {
+  padding: var(--space-4) var(--space-5);
+}
+
+.card--flush .card__body {
+  padding: 0;
+}
+
+/* ---- Badge ------------------------------------------------------------ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.badge__icon {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.badge--critical {
+  background: var(--sev-critical-bg);
+  color: var(--sev-critical-fg);
+}
+.badge--warning {
+  background: var(--sev-warning-bg);
+  color: var(--sev-warning-fg);
+}
+.badge--info {
+  background: var(--sev-info-bg);
+  color: var(--sev-info-fg);
+}
+.badge--ok {
+  background: var(--sev-ok-bg);
+  color: var(--sev-ok-fg);
+}
+.badge--neutral {
+  background: var(--surface-sunken);
+  color: var(--ink-secondary);
+}
+
+/* ---- Chip (toggle filter) --------------------------------------------- */
+.chip {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition:
+    background var(--motion-fast) var(--ease),
+    opacity var(--motion-fast) var(--ease);
+}
+
+.chip:hover {
+  background: var(--surface-hover);
+}
+
+.chip[aria-pressed='false'] {
+  opacity: 0.55;
+}
+
+.chip[aria-pressed='true'] {
+  border-color: transparent;
+}
+
+.chip--critical[aria-pressed='true'] {
+  background: var(--sev-critical-bg);
+  color: var(--sev-critical-fg);
+}
+.chip--warning[aria-pressed='true'] {
+  background: var(--sev-warning-bg);
+  color: var(--sev-warning-fg);
+}
+.chip--info[aria-pressed='true'] {
+  background: var(--sev-info-bg);
+  color: var(--sev-info-fg);
+}
+.chip--ok[aria-pressed='true'] {
+  background: var(--sev-ok-bg);
+  color: var(--sev-ok-fg);
+}
+
+/* ---- Button ----------------------------------------------------------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-card);
+  color: var(--ink-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--ease);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--surface-hover);
+  text-decoration: none;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button--primary {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-contrast);
+}
+
+.button--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  color: var(--accent-contrast);
+}
+
+/* ---- StatTile --------------------------------------------------------- */
+.stat-tile {
+  flex: 1 1 8rem;
+  min-width: 8rem;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-tile__label {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.stat-tile__value {
+  display: block;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-tile__value--critical {
+  color: var(--sev-critical-fg);
+}
+.stat-tile__value--warning {
+  color: var(--sev-warning-fg);
+}
+.stat-tile__value--info {
+  color: var(--sev-info-fg);
+}
+
+/* ---- ScoreGauge ------------------------------------------------------- */
+.score {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.score__gauge {
+  flex: none;
+  transform: rotate(-90deg);
+}
+
+.score__track {
+  fill: none;
+  stroke: var(--line);
+}
+
+.score__meter {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dasharray var(--motion-base) var(--ease);
+}
+
+.score__grade {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score__caption {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* ---- States ----------------------------------------------------------- */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  padding: var(--space-6) var(--space-4);
+  color: var(--ink-muted);
+}
+
+.state__title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.state__detail {
+  max-width: 46ch;
+  font-size: var(--text-sm);
+}
+
+.state__detail code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--surface-sunken);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Skeletons stand in for content while the first report loads, so the layout
+   does not jump when it arrives. */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-sunken),
+    var(--surface-hover),
+    var(--surface-sunken)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}

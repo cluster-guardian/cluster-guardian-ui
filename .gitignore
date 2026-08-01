@@ -1,0 +1,22 @@
+node_modules/
+dist/
+coverage/
+design/dist/
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+
+# Editors / OS
+.DS_Store
+*.local
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local env overrides (CG_URL etc.)
+.env
+.env.*
+!.env.example

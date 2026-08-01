@@ -1,0 +1,149 @@
+<!-- @dsCard group="Charts" title="Severity trend" subtitle="Stacked area, legend, tooltip, table view" -->
+<div class="ds-section">
+  <p class="ds-label">Findings by severity over time</p>
+  <p class="ds-note">
+    <strong>Form.</strong> Change over time where the parts sum to a meaningful whole (total
+    findings) — a stacked area, on one y axis. Never a second axis for the score: two measures of
+    different scale get two charts, not two scales.
+  </p>
+  <p class="ds-note">
+    <strong>Color.</strong> Severity is a status scale, not a categorical one, so the marks come
+    from the validated status set rather than the series palette. Light passes every check clean.
+    Dark passes with critical↔warning at deutan ΔE 6.2 — inside the 6–8 band, which is legal only
+    with secondary encoding. Four things supply it here, and removing any of them means
+    re-validating: the 2px surface-colored gap between stacked fills, the always-present legend, the
+    labelled tooltip, and the table view.
+  </p>
+
+  <figure class="trend card" style="padding: var(--space-4) var(--space-5)">
+    <figcaption class="trend__caption">
+      <span class="trend__title">Findings by severity over 8 runs</span>
+      <button class="button trend__toggle" aria-pressed="false">Show table</button>
+    </figcaption>
+
+    <ul class="trend__legend">
+      <li class="trend__legend-item">
+        <span class="trend__swatch" style="background: var(--mark-critical)"></span>Critical
+      </li>
+      <li class="trend__legend-item">
+        <span class="trend__swatch" style="background: var(--mark-warning)"></span>Warning
+      </li>
+      <li class="trend__legend-item">
+        <span class="trend__swatch" style="background: var(--mark-info)"></span>Info
+      </li>
+    </ul>
+
+    <!-- Static stand-in for the Recharts render: same marks, same gaps. -->
+    <svg
+      viewBox="0 0 640 200"
+      width="100%"
+      height="200"
+      role="img"
+      aria-label="Stacked area of critical, warning and info findings across eight runs"
+    >
+      <g stroke="var(--chart-grid)" stroke-width="1">
+        <line x1="40" y1="20" x2="620" y2="20" />
+        <line x1="40" y1="65" x2="620" y2="65" />
+        <line x1="40" y1="110" x2="620" y2="110" />
+        <line x1="40" y1="155" x2="620" y2="155" />
+      </g>
+      <path
+        d="M40 175 L123 170 L206 168 L289 160 L372 155 L455 150 L538 146 L620 140 L620 175 Z"
+        fill="var(--mark-info)"
+        fill-opacity="0.9"
+        stroke="var(--surface-card)"
+        stroke-width="2"
+      />
+      <path
+        d="M40 100 L123 96 L206 90 L289 84 L372 76 L455 70 L538 66 L620 58 L620 140 L538 146 L455 150 L372 155 L289 160 L206 168 L123 170 L40 175 Z"
+        fill="var(--mark-warning)"
+        fill-opacity="0.9"
+        stroke="var(--surface-card)"
+        stroke-width="2"
+      />
+      <path
+        d="M40 86 L123 82 L206 74 L289 68 L372 58 L455 50 L538 44 L620 34 L620 58 L538 66 L455 70 L372 76 L289 84 L206 90 L123 96 L40 100 Z"
+        fill="var(--mark-critical)"
+        fill-opacity="0.9"
+        stroke="var(--surface-card)"
+        stroke-width="2"
+      />
+      <line x1="40" y1="175" x2="620" y2="175" stroke="var(--chart-axis)" stroke-width="1" />
+      <g fill="var(--chart-ink)" font-size="11" font-family="system-ui, sans-serif">
+        <text x="8" y="24">24</text>
+        <text x="8" y="69">18</text>
+        <text x="8" y="114">12</text>
+        <text x="8" y="159">6</text>
+        <text x="40" y="192">Jul 19</text>
+        <text x="560" y="192">Jul 26</text>
+      </g>
+    </svg>
+  </figure>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Tooltip</p>
+  <p class="ds-note">
+    Crosshair plus tooltip is the default on any line or area chart — an HTML chart is interactive,
+    so ship the hover layer. Rows read worst-first, matching how the stack looks; the score comes
+    below a rule because it is a different measure.
+  </p>
+  <div class="trend__tooltip" style="width: fit-content">
+    <p class="trend__tooltip-time">26 Jul 2026, 07:17</p>
+    <p class="trend__tooltip-row">
+      <span class="trend__swatch" style="background: var(--mark-critical)"></span>Critical
+      <span class="trend__tooltip-value tabular">1</span>
+    </p>
+    <p class="trend__tooltip-row">
+      <span class="trend__swatch" style="background: var(--mark-warning)"></span>Warning
+      <span class="trend__tooltip-value tabular">10</span>
+    </p>
+    <p class="trend__tooltip-row">
+      <span class="trend__swatch" style="background: var(--mark-info)"></span>Info
+      <span class="trend__tooltip-value tabular">11</span>
+    </p>
+    <p class="trend__tooltip-row trend__tooltip-row--total">
+      Score <span class="trend__tooltip-value tabular">34</span>
+    </p>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Table view</p>
+  <p class="ds-note">
+    Not a fallback — a peer. It is the non-visual route to the same numbers and part of what makes
+    the dark palette legal. Wide tables scroll inside their own box; the page never scrolls
+    sideways.
+  </p>
+  <div class="card" style="padding: var(--space-4) var(--space-5)">
+    <div class="trend__table-wrap">
+      <table class="trend__table">
+        <thead>
+          <tr>
+            <th scope="col">Run</th>
+            <th scope="col">Critical</th>
+            <th scope="col">Warning</th>
+            <th scope="col">Info</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">26 Jul 2026, 07:17</th>
+            <td class="tabular">1</td>
+            <td class="tabular">6</td>
+            <td class="tabular">7</td>
+            <td class="tabular">54</td>
+          </tr>
+          <tr>
+            <th scope="row">26 Jul 2026, 07:18</th>
+            <td class="tabular">1</td>
+            <td class="tabular">10</td>
+            <td class="tabular">11</td>
+            <td class="tabular">34</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

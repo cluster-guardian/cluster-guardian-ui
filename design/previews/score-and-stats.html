@@ -1,0 +1,96 @@
+<!-- @dsCard group="Components" title="Score & stat tiles" subtitle="Health gauge, A–F grade, summary counts" -->
+<div class="ds-section">
+  <p class="ds-label">Score gauge</p>
+  <p class="ds-note">
+    One value, no comparison — so a hero figure with a ring, not a chart. The ring is decorative:
+    the number and the letter are both present as text, and the SVG's accessible name carries the
+    whole reading ("Health score 34 out of 100, grade F — Critical").
+  </p>
+  <div class="ds-row">
+    <div class="score">
+      <svg class="score__gauge" width="60" height="60" viewBox="0 0 60 60">
+        <circle class="score__track" cx="30" cy="30" r="26" stroke-width="8" />
+        <circle
+          class="score__meter"
+          cx="30"
+          cy="30"
+          r="26"
+          stroke-width="8"
+          stroke="var(--grade-a)"
+          stroke-dasharray="155 8"
+        />
+      </svg>
+      <div>
+        <span class="score__grade tabular" style="color: var(--grade-a)">A</span>
+        <span class="score__caption"> 95/100</span>
+        <div class="score__caption">Health score</div>
+      </div>
+    </div>
+
+    <div class="score">
+      <svg class="score__gauge" width="60" height="60" viewBox="0 0 60 60">
+        <circle class="score__track" cx="30" cy="30" r="26" stroke-width="8" />
+        <circle
+          class="score__meter"
+          cx="30"
+          cy="30"
+          r="26"
+          stroke-width="8"
+          stroke="var(--grade-c)"
+          stroke-dasharray="118 45"
+        />
+      </svg>
+      <div>
+        <span class="score__grade tabular" style="color: var(--grade-c)">C</span>
+        <span class="score__caption"> 72/100</span>
+        <div class="score__caption">Health score</div>
+      </div>
+    </div>
+
+    <div class="score">
+      <svg class="score__gauge" width="60" height="60" viewBox="0 0 60 60">
+        <circle class="score__track" cx="30" cy="30" r="26" stroke-width="8" />
+        <circle
+          class="score__meter"
+          cx="30"
+          cy="30"
+          r="26"
+          stroke-width="8"
+          stroke="var(--grade-f)"
+          stroke-dasharray="56 107"
+        />
+      </svg>
+      <div>
+        <span class="score__grade tabular" style="color: var(--grade-f)">F</span>
+        <span class="score__caption"> 34/100</span>
+        <div class="score__caption">Health score</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Stat tiles</p>
+  <p class="ds-note">
+    A row of counts, not a chart — four numbers with no shared scale worth plotting. The number is
+    tinted with its severity ink; the label stays in muted text.
+  </p>
+  <div class="ds-row" style="align-items: stretch">
+    <div class="stat-tile">
+      <span class="stat-tile__value stat-tile__value--critical">1</span>
+      <span class="stat-tile__label">Critical</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-tile__value stat-tile__value--warning">10</span>
+      <span class="stat-tile__label">Warnings</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-tile__value stat-tile__value--info">11</span>
+      <span class="stat-tile__label">Info</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-tile__value">2</span>
+      <span class="stat-tile__label">Namespaces</span>
+    </div>
+  </div>
+</div>

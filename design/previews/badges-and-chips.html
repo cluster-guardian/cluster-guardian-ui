@@ -1,0 +1,63 @@
+<!-- @dsCard group="Components" title="Badges & chips" subtitle="Severity badges, filter chips, buttons" -->
+<div class="ds-section">
+  <p class="ds-label">Severity badge</p>
+  <p class="ds-note">
+    Always a glyph plus the word. Two of the severity colors sit below 3:1 on the light surface, so
+    the pairing is what makes them legible — and what keeps them readable under color-vision
+    deficiency. Never ship a severity as a bare colored dot.
+  </p>
+  <div class="ds-row">
+    <span class="badge badge--critical"><span class="badge__icon">✕</span>Critical</span>
+    <span class="badge badge--warning"><span class="badge__icon">!</span>Warning</span>
+    <span class="badge badge--info"><span class="badge__icon">ℹ</span>Info</span>
+    <span class="badge badge--ok"><span class="badge__icon">✓</span>OK</span>
+  </div>
+  <p class="ds-label">With counts, as used in section headers</p>
+  <div class="ds-row">
+    <span class="badge badge--critical"
+      ><span class="badge__icon">✕</span><span class="tabular">2</span>Critical</span
+    >
+    <span class="badge badge--warning"
+      ><span class="badge__icon">!</span><span class="tabular">10</span>Warning</span
+    >
+    <span class="badge badge--info"
+      ><span class="badge__icon">ℹ</span><span class="tabular">11</span>Info</span
+    >
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Filter chip</p>
+  <p class="ds-note">
+    A toggle, not a link — state lives in <code>aria-pressed</code> so it is announced, not just
+    dimmed. Turning a severity off never repaints the others: color follows the level, never its
+    rank in the current selection.
+  </p>
+  <div class="ds-row">
+    <button class="chip chip--critical" aria-pressed="true">
+      ✕ Critical <span class="tabular">1</span>
+    </button>
+    <button class="chip chip--warning" aria-pressed="true">
+      ! Warning <span class="tabular">10</span>
+    </button>
+    <button class="chip chip--info" aria-pressed="true">
+      ℹ Info <span class="tabular">11</span>
+    </button>
+    <button class="chip chip--ok" aria-pressed="false">✓ OK <span class="tabular">0</span></button>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Buttons</p>
+  <div class="ds-row">
+    <button class="button button--primary">Refresh</button>
+    <button class="button">JSON</button>
+    <button class="button">Markdown</button>
+    <button class="button" disabled>Refreshing…</button>
+  </div>
+  <p class="ds-note">
+    Secondary is the default: this is a read-only tool and almost every action is a download or a
+    view change. Primary is reserved for the one action that costs something — forcing a fresh
+    analysis against the API server.
+  </p>
+</div>

@@ -1,0 +1,67 @@
+.diff {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--space-5);
+}
+
+.diff__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-2);
+}
+
+/* Direction is carried by the caret glyph and the word, not by color alone. */
+.diff__heading--new {
+  color: var(--sev-critical-fg);
+}
+
+.diff__heading--resolved {
+  color: var(--sev-ok-fg);
+}
+
+.diff__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.diff__item {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+  font-size: var(--text-sm);
+}
+
+.diff__severity {
+  font-weight: 700;
+  flex: none;
+  width: 1em;
+  text-align: center;
+}
+
+.diff__severity--critical {
+  color: var(--sev-critical-fg);
+}
+.diff__severity--warning {
+  color: var(--sev-warning-fg);
+}
+.diff__severity--info {
+  color: var(--sev-info-fg);
+}
+.diff__severity--ok {
+  color: var(--sev-ok-fg);
+}
+
+.diff__location {
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+}
+
+.diff__empty {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}

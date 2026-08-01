@@ -1,0 +1,213 @@
+/*
+ * Cluster Guardian design tokens.
+ *
+ * The single source of truth for the visual language. Components reference
+ * roles (--surface-card, --sev-critical-fg), never raw hex, so light/dark and
+ * any future rebrand swap in one place.
+ *
+ * Chart mark colors (--mark-*) are separate from badge/text colors on purpose:
+ * a fill on a chart surface and a 12px uppercase label have different contrast
+ * requirements. The mark set is validated for the lightness band, chroma floor,
+ * CVD separation and contrast against the surface it actually renders on:
+ *
+ *   light (on #ffffff): #d03b3b, #c98500, #2a78d6 — all checks pass
+ *   dark  (on #181b23): #e34948, #c98500, #3987e5 — passes; critical/warning
+ *     sit at deutan ΔE 6.2, inside the 6-8 band, which is legal only with
+ *     secondary encoding. TrendChart supplies it: 2px surface gaps between
+ *     stacked segments, an always-present legend, labelled tooltips, and a
+ *     table view. Do not drop those without re-validating.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---- Surfaces & ink ------------------------------------------------- */
+  --surface-page: #f2f5f9;
+  --surface-card: #ffffff;
+  --surface-sunken: #eef2f7;
+  --surface-hover: rgba(23, 32, 58, 0.04);
+
+  --ink-primary: #17203a;
+  --ink-secondary: rgba(23, 32, 58, 0.72);
+  --ink-muted: rgba(23, 32, 58, 0.55);
+
+  --line: rgba(23, 32, 58, 0.1);
+  --line-strong: rgba(23, 32, 58, 0.18);
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-contrast: #ffffff;
+  --focus-ring: #2563eb;
+
+  /* ---- Severity: badge / chip surfaces and text ----------------------- */
+  --sev-ok-bg: #d9f2e2;
+  --sev-ok-fg: #146c37;
+  --sev-info-bg: #dcebfa;
+  --sev-info-fg: #1b5490;
+  --sev-warning-bg: #fdeeca;
+  --sev-warning-fg: #7a5600;
+  --sev-critical-bg: #fadada;
+  --sev-critical-fg: #97231f;
+
+  /* ---- Severity: chart marks (validated set, light surface) ----------- */
+  --mark-critical: #d03b3b;
+  --mark-warning: #c98500;
+  --mark-info: #2a78d6;
+  --mark-ok: #0ca30c;
+
+  /* ---- Grades --------------------------------------------------------- */
+  --grade-a: #146c37;
+  --grade-b: #146c37;
+  --grade-c: #7a5600;
+  --grade-d: #a85c00;
+  --grade-f: #97231f;
+
+  /* ---- Chart chrome --------------------------------------------------- */
+  --chart-grid: #e3e8f0;
+  --chart-axis: #c3cad6;
+  --chart-ink: rgba(23, 32, 58, 0.55);
+
+  /* ---- Elevation ------------------------------------------------------ */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 16px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 8px 32px rgba(15, 23, 42, 0.12);
+
+  /* ---- Geometry ------------------------------------------------------- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* ---- Type ----------------------------------------------------------- */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  --text-xs: 0.72rem;
+  --text-sm: 0.85rem;
+  --text-base: 0.95rem;
+  --text-md: 1.05rem;
+  --text-lg: 1.3rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.4rem;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.55;
+
+  /* ---- Layout --------------------------------------------------------- */
+  --content-width: 1080px;
+  --header-height: 56px;
+
+  /* ---- Motion --------------------------------------------------------- */
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --ease: cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/*
+ * Dark steps are chosen for the dark surface, not flipped from light.
+ * Declared under both the OS media query and the explicit [data-theme] stamp
+ * so a manual toggle wins in either direction.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --surface-page: #0f1117;
+    --surface-card: #181b23;
+    --surface-sunken: #12151c;
+    --surface-hover: rgba(231, 234, 242, 0.05);
+
+    --ink-primary: #e7eaf2;
+    --ink-secondary: rgba(231, 234, 242, 0.72);
+    --ink-muted: rgba(231, 234, 242, 0.55);
+
+    --line: rgba(231, 234, 242, 0.1);
+    --line-strong: rgba(231, 234, 242, 0.2);
+
+    --accent: #5598e7;
+    --accent-hover: #6da7ec;
+    --accent-contrast: #0f1117;
+    --focus-ring: #5598e7;
+
+    --sev-ok-bg: rgba(12, 163, 12, 0.16);
+    --sev-ok-fg: #4ade80;
+    --sev-info-bg: rgba(57, 135, 229, 0.16);
+    --sev-info-fg: #7ab8ff;
+    --sev-warning-bg: rgba(201, 133, 0, 0.2);
+    --sev-warning-fg: #fbbf24;
+    --sev-critical-bg: rgba(227, 73, 72, 0.18);
+    --sev-critical-fg: #f7908e;
+
+    --mark-critical: #e34948;
+    --mark-warning: #c98500;
+    --mark-info: #3987e5;
+    --mark-ok: #0ca30c;
+
+    --grade-a: #4ade80;
+    --grade-b: #4ade80;
+    --grade-c: #fbbf24;
+    --grade-d: #f0a35c;
+    --grade-f: #f7908e;
+
+    --chart-grid: #262a34;
+    --chart-axis: #383d49;
+    --chart-ink: rgba(231, 234, 242, 0.55);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.25);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
+  }
+}
+
+:root[data-theme='dark'] {
+  --surface-page: #0f1117;
+  --surface-card: #181b23;
+  --surface-sunken: #12151c;
+  --surface-hover: rgba(231, 234, 242, 0.05);
+
+  --ink-primary: #e7eaf2;
+  --ink-secondary: rgba(231, 234, 242, 0.72);
+  --ink-muted: rgba(231, 234, 242, 0.55);
+
+  --line: rgba(231, 234, 242, 0.1);
+  --line-strong: rgba(231, 234, 242, 0.2);
+
+  --accent: #5598e7;
+  --accent-hover: #6da7ec;
+  --accent-contrast: #0f1117;
+  --focus-ring: #5598e7;
+
+  --sev-ok-bg: rgba(12, 163, 12, 0.16);
+  --sev-ok-fg: #4ade80;
+  --sev-info-bg: rgba(57, 135, 229, 0.16);
+  --sev-info-fg: #7ab8ff;
+  --sev-warning-bg: rgba(201, 133, 0, 0.2);
+  --sev-warning-fg: #fbbf24;
+  --sev-critical-bg: rgba(227, 73, 72, 0.18);
+  --sev-critical-fg: #f7908e;
+
+  --mark-critical: #e34948;
+  --mark-warning: #c98500;
+  --mark-info: #3987e5;
+  --mark-ok: #0ca30c;
+
+  --grade-a: #4ade80;
+  --grade-b: #4ade80;
+  --grade-c: #fbbf24;
+  --grade-d: #f0a35c;
+  --grade-f: #f7908e;
+
+  --chart-grid: #262a34;
+  --chart-axis: #383d49;
+  --chart-ink: rgba(231, 234, 242, 0.55);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
+}

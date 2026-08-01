@@ -1,0 +1,132 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  # Static checks are cheap and independent — one job so a formatting slip and
+  # a type error surface in the same run instead of one hiding the other.
+  check:
+    name: Lint, format, typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Format
+        run: npm run format
+      - name: Typecheck
+        run: npm run typecheck
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Build the design bundle
+        # Catches a preview that references a stylesheet or token that no
+        # longer exists — the bundle is generated from src/, so it breaks first.
+        run: npm run design:build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  # Boots a real cluster-guardian with canned reports (no cluster needed) and
+  # drives the production bundle against it.
+  e2e:
+    name: End-to-end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      # Built from source rather than downloaded: the JSON-only API and
+      # `serve --fixture` this suite depends on are newer than the latest
+      # release. Switch to a release binary once one ships with both.
+      #
+      # CG_REF is pinned to a ref rather than tracking main so an unannounced
+      # backend change fails a deliberate bump, not every unrelated PR.
+      - name: Check out cluster-guardian
+        uses: actions/checkout@v5
+        with:
+          repository: cluster-guardian/cluster-guardian
+          ref: main
+          path: .backend
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: .backend/go.mod
+          cache-dependency-path: .backend/go.sum
+
+      - name: Build cluster-guardian
+        working-directory: .backend
+        run: go build -o ../cluster-guardian .
+
+      - run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run e2e
+        env:
+          CG_BIN: ./cluster-guardian
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # A dependency with a known advisory should not reach main.
+  audit:
+    name: Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm audit --audit-level=high

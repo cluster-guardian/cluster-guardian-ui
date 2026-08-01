@@ -1,0 +1,131 @@
+<!-- @dsCard group="Brand" title="Mark & app shell" subtitle="Shield logo, header, footer" -->
+<div class="ds-section">
+  <p class="ds-label">Mark</p>
+  <p class="ds-note">
+    A shield with a check: the tool guards a cluster and reports a verdict. Drawn on a 24px grid
+    with a 1.8px stroke so it stays legible at 22px in the header and as a 16px favicon. The stroke
+    is <code>currentColor</code> — the mark inherits ink and needs no per-theme variant.
+  </p>
+  <div class="ds-row">
+    <svg width="96" height="96" viewBox="0 0 24 24" style="color: var(--accent)">
+      <path
+        d="M12 2.5 20 5.5v6.2c0 5-3.4 9.3-8 10.8-4.6-1.5-8-5.8-8-10.8V5.5z"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+      />
+      <path
+        d="m8.4 12.2 2.6 2.6 4.6-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <svg width="48" height="48" viewBox="0 0 24 24" style="color: var(--ink-primary)">
+      <path
+        d="M12 2.5 20 5.5v6.2c0 5-3.4 9.3-8 10.8-4.6-1.5-8-5.8-8-10.8V5.5z"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+      />
+      <path
+        d="m8.4 12.2 2.6 2.6 4.6-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <svg width="22" height="22" viewBox="0 0 24 24" style="color: var(--ink-primary)">
+      <path
+        d="M12 2.5 20 5.5v6.2c0 5-3.4 9.3-8 10.8-4.6-1.5-8-5.8-8-10.8V5.5z"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+      />
+      <path
+        d="m8.4 12.2 2.6 2.6 4.6-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <!-- Favicon variant: solid fill, since a hairline stroke disappears at 16px. -->
+    <svg width="32" height="32" viewBox="0 0 24 24">
+      <path d="M12 2.5 20 5.5v6.2c0 5-3.4 9.3-8 10.8-4.6-1.5-8-5.8-8-10.8V5.5z" fill="#2563eb" />
+      <path
+        d="m8.4 12.2 2.6 2.6 4.6-5"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">App header</p>
+  <p class="ds-note">
+    Sticky, one row, hairline rule. Auto-refresh is a switch rather than a default because a refresh
+    in single-cluster mode triggers a real analysis against the API server. The Refresh button is
+    absent entirely in fleet mode, where reports come from the scan schedule.
+  </p>
+  <header
+    class="app-header"
+    style="position: static; border-radius: var(--radius-lg); border: 1px solid var(--line)"
+  >
+    <div class="app-header__inner">
+      <a class="app-header__brand" href="#">
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <path
+            d="M12 2.5 20 5.5v6.2c0 5-3.4 9.3-8 10.8-4.6-1.5-8-5.8-8-10.8V5.5z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linejoin="round"
+          />
+          <path
+            d="m8.4 12.2 2.6 2.6 4.6-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>Cluster Guardian</span>
+      </a>
+      <div class="app-header__actions">
+        <label class="app-header__switch"><input type="checkbox" /> Auto-refresh</label>
+        <button class="button">Refresh</button>
+        <label class="app-header__switch">
+          <select class="toolbar__select">
+            <option>System</option>
+            <option>Light</option>
+            <option>Dark</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </header>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Voice</p>
+  <p class="ds-note">
+    Findings are stated, not sold: "2 containers running as root", never "Uh oh! We found some
+    issues". Hints say what to change. Errors say what to run. Counts are exact, never "many". The
+    tool is read-only and its output goes into CI and into leadership reports — the writing has to
+    survive both.
+  </p>
+</div>

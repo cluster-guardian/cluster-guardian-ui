@@ -1,0 +1,126 @@
+<!-- @dsCard group="Foundations" title="Color" subtitle="Surfaces, ink, severity, chart marks, grades" -->
+<div class="ds-section">
+  <p class="ds-label">Surfaces &amp; ink</p>
+  <p class="ds-note">
+    Every color is a role, never a raw hex. Both themes are chosen for their own surface — dark is
+    not a flip of light. The tokens declare dark under both the OS media query and the
+    <code>[data-theme]</code> stamp, so an explicit toggle wins in either direction.
+  </p>
+  <div class="ds-grid">
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--surface-page)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Page</div>
+        <div class="ds-swatch__token">--surface-page</div>
+      </div>
+    </div>
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--surface-card)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Card</div>
+        <div class="ds-swatch__token">--surface-card</div>
+      </div>
+    </div>
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--surface-sunken)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Sunken</div>
+        <div class="ds-swatch__token">--surface-sunken</div>
+      </div>
+    </div>
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--ink-primary)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Primary ink</div>
+        <div class="ds-swatch__token">--ink-primary</div>
+      </div>
+    </div>
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--ink-muted)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Muted ink</div>
+        <div class="ds-swatch__token">--ink-muted</div>
+      </div>
+    </div>
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--accent)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Accent</div>
+        <div class="ds-swatch__token">--accent</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Severity — badge surfaces and text</p>
+  <p class="ds-note">
+    Four levels, matching the backend's <code>Severity</code> enum: ok &lt; info &lt; warning &lt;
+    critical. Badge colors are tuned for a 12px uppercase label, which is a different contrast
+    problem from a chart fill — that is why marks below are a separate set.
+  </p>
+  <div class="ds-row">
+    <span class="badge badge--critical"><span class="badge__icon">✕</span>Critical</span>
+    <span class="badge badge--warning"><span class="badge__icon">!</span>Warning</span>
+    <span class="badge badge--info"><span class="badge__icon">ℹ</span>Info</span>
+    <span class="badge badge--ok"><span class="badge__icon">✓</span>OK</span>
+    <span class="badge badge--neutral">Neutral</span>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Severity — chart marks</p>
+  <p class="ds-note">
+    A validated set, not a taste call. Light (on <code>#ffffff</code>): <code>#d03b3b</code>,
+    <code>#c98500</code>, <code>#2a78d6</code> — passes the lightness band, chroma floor, CVD
+    separation and contrast checks. Dark (on <code>#181b23</code>): <code>#e34948</code>,
+    <code>#c98500</code>, <code>#3987e5</code> — passes, with critical↔warning at deutan ΔE 6.2,
+    inside the 6–8 band. That is legal only with secondary encoding, which the trend chart supplies:
+    2px surface gaps between stacked fills, a legend, labelled tooltips and a table view.
+  </p>
+  <div class="ds-grid">
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--mark-critical)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Critical</div>
+        <div class="ds-swatch__token">--mark-critical</div>
+      </div>
+    </div>
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--mark-warning)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Warning</div>
+        <div class="ds-swatch__token">--mark-warning</div>
+      </div>
+    </div>
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--mark-info)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">Info</div>
+        <div class="ds-swatch__token">--mark-info</div>
+      </div>
+    </div>
+    <div class="ds-swatch">
+      <div class="ds-swatch__chip" style="background: var(--mark-ok)"></div>
+      <div class="ds-swatch__meta">
+        <div class="ds-swatch__name">OK</div>
+        <div class="ds-swatch__token">--mark-ok</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Grades</p>
+  <p class="ds-note">
+    A–F from the 0–100 health score, thresholds identical to <code>report.GradeOf</code>: 90 / 80 /
+    70 / 60. A and B share a color deliberately — the distinction that matters is healthy vs not.
+  </p>
+  <div class="ds-row">
+    <span style="color: var(--grade-a); font-size: var(--text-xl); font-weight: 700">A</span>
+    <span style="color: var(--grade-b); font-size: var(--text-xl); font-weight: 700">B</span>
+    <span style="color: var(--grade-c); font-size: var(--text-xl); font-weight: 700">C</span>
+    <span style="color: var(--grade-d); font-size: var(--text-xl); font-weight: 700">D</span>
+    <span style="color: var(--grade-f); font-size: var(--text-xl); font-weight: 700">F</span>
+  </div>
+</div>

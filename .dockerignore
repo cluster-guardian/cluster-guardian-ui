@@ -1,0 +1,10 @@
+node_modules
+dist
+design/dist
+coverage
+playwright-report
+test-results
+.git
+.github
+*.md
+!README.md

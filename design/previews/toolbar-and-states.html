@@ -1,0 +1,118 @@
+<!-- @dsCard group="Components" title="Toolbar & states" subtitle="Filters, empty, error, loading" -->
+<div class="ds-section">
+  <p class="ds-label">Filter toolbar</p>
+  <p class="ds-note">
+    One row above the content: severity chips, search, namespace, team. It sticks to the top of the
+    viewport on desktop and unsticks below 640px, where the controls go full-width instead. The
+    match count is a live region, so filtering announces its result.
+  </p>
+  <div class="toolbar card" style="position: static">
+    <div class="toolbar__row">
+      <div class="toolbar__chips">
+        <button class="chip chip--critical" aria-pressed="true">
+          ✕ Critical <span class="tabular">1</span>
+        </button>
+        <button class="chip chip--warning" aria-pressed="true">
+          ! Warning <span class="tabular">10</span>
+        </button>
+        <button class="chip chip--info" aria-pressed="true">
+          ℹ Info <span class="tabular">11</span>
+        </button>
+        <button class="chip chip--ok" aria-pressed="false">
+          ✓ OK <span class="tabular">0</span>
+        </button>
+      </div>
+      <label class="toolbar__field">
+        <input type="search" class="toolbar__search" placeholder="Search findings…" />
+      </label>
+      <label class="toolbar__field">
+        <select class="toolbar__select">
+          <option>All namespaces</option>
+        </select>
+      </label>
+      <label class="toolbar__field">
+        <select class="toolbar__select">
+          <option>All teams</option>
+        </select>
+      </label>
+    </div>
+    <p class="toolbar__count">
+      Showing <span class="tabular">22</span> of <span class="tabular">22</span> findings
+    </p>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Run-over-run diff</p>
+  <p class="ds-note">
+    Direction is carried by the caret and the word, not by color alone. The backend normalizes
+    counts before diffing, so "5 Pods" → "3 Pods" is not reported as new plus resolved.
+  </p>
+  <div class="card" style="padding: var(--space-4) var(--space-5)">
+    <div class="diff">
+      <section class="diff__column">
+        <h3 class="diff__heading diff__heading--new">▲ New <span class="tabular">2</span></h3>
+        <ul class="diff__list">
+          <li class="diff__item">
+            <span class="diff__severity diff__severity--critical">✕</span>
+            <div>
+              <p>2 privileged containers</p>
+              <p class="diff__location">Security</p>
+            </div>
+          </li>
+          <li class="diff__item">
+            <span class="diff__severity diff__severity--warning">!</span>
+            <div>
+              <p>1 Pod missing resource requests</p>
+              <p class="diff__location">namespace payments · payments-team</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+      <section class="diff__column">
+        <h3 class="diff__heading diff__heading--resolved">
+          ▼ Resolved <span class="tabular">1</span>
+        </h3>
+        <ul class="diff__list">
+          <li class="diff__item">
+            <span class="diff__severity diff__severity--warning">!</span>
+            <div>
+              <p>1 single-replica Deployment (web)</p>
+              <p class="diff__location">namespace shop · shop-team</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">States</p>
+  <p class="ds-note">
+    Connection failure is the common case here — the backend may not be running, or may be running
+    without <code>--fleet</code>. The error state says which and says what to run, rather than
+    printing a stack trace.
+  </p>
+  <div class="card" style="padding: var(--space-2)">
+    <div class="state">
+      <p class="state__title">Could not reach cluster-guardian</p>
+      <p class="state__detail">
+        Start it with <code>cluster-guardian serve --listen 127.0.0.1:8099</code>, or point the UI
+        elsewhere with <code>CG_URL</code>.
+      </p>
+    </div>
+  </div>
+  <div class="card" style="padding: var(--space-2)">
+    <div class="state">
+      <p class="state__title">No findings match these filters</p>
+      <p class="state__detail">
+        Widen the severity chips, clear the search box, or pick a different namespace.
+      </p>
+    </div>
+  </div>
+  <div class="card" style="padding: var(--space-2)">
+    <div class="state"><div class="spinner"></div></div>
+  </div>
+  <div class="skeleton" style="height: 88px"></div>
+</div>

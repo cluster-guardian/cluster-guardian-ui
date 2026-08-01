@@ -1,0 +1,52 @@
+server {
+    # 8080, not 80: the container runs unprivileged in the Kubernetes manifests.
+    listen 8080;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Don't advertise the version in error pages and headers.
+    server_tokens off;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+    gzip_min_length 1024;
+
+    # Hashed asset filenames are immutable; index.html must not be cached or a
+    # deploy leaves browsers pointing at chunks that no longer exist.
+    location /assets/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+
+    # The backend routes. Everything else belongs to the SPA — note that / is
+    # deliberately not proxied even though cluster-guardian serves a JSON index
+    # there.
+    location /api/ {
+        proxy_pass ${CG_UPSTREAM};
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        # An analysis can take a while on a large cluster; the server caps
+        # itself at 2 minutes, so allow slightly more before giving up.
+        proxy_read_timeout 150s;
+    }
+
+    location = /healthz {
+        proxy_pass ${CG_UPSTREAM}/healthz;
+    }
+
+    location = /metrics {
+        proxy_pass ${CG_UPSTREAM}/metrics;
+    }
+
+    # Client-side routing: /clusters/{name} is a real URL that must survive a
+    # reload, so unknown paths fall back to the app shell.
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

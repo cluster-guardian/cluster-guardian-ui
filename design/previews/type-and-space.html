@@ -1,0 +1,121 @@
+<!-- @dsCard group="Foundations" title="Type & space" subtitle="Scale, spacing, radii, elevation" -->
+<div class="ds-section">
+  <p class="ds-label">Type scale</p>
+  <p class="ds-note">
+    One system sans throughout — no display or serif face. Numbers that must align vertically (table
+    columns, axis ticks, counts) carry <code>font-variant-numeric: tabular-nums</code>; standalone
+    figures keep proportional digits.
+  </p>
+  <div class="ds-section">
+    <div style="font-size: var(--text-2xl); line-height: var(--leading-tight)">
+      2.4rem — hero figure <span class="ds-swatch__token">--text-2xl</span>
+    </div>
+    <div style="font-size: var(--text-xl); line-height: var(--leading-tight)">
+      1.75rem — stat value <span class="ds-swatch__token">--text-xl</span>
+    </div>
+    <div style="font-size: var(--text-lg)">
+      1.3rem — page title <span class="ds-swatch__token">--text-lg</span>
+    </div>
+    <div style="font-size: var(--text-md)">
+      1.05rem — section heading <span class="ds-swatch__token">--text-md</span>
+    </div>
+    <div style="font-size: var(--text-base)">
+      0.95rem — body <span class="ds-swatch__token">--text-base</span>
+    </div>
+    <div style="font-size: var(--text-sm)">
+      0.85rem — secondary, hints <span class="ds-swatch__token">--text-sm</span>
+    </div>
+    <div style="font-size: var(--text-xs)">
+      0.72rem — badges, labels <span class="ds-swatch__token">--text-xs</span>
+    </div>
+    <div class="mono">
+      monospace — object refs, controls, server URLs
+      <span class="ds-swatch__token">--font-mono</span>
+    </div>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Spacing</p>
+  <p class="ds-note">A 0.25rem base, doubling loosely. Gaps between cards are --space-4.</p>
+  <div class="ds-row" style="align-items: flex-end">
+    <div>
+      <div style="width: var(--space-1); height: 40px; background: var(--accent)"></div>
+      <div class="ds-swatch__token">1</div>
+    </div>
+    <div>
+      <div style="width: var(--space-2); height: 40px; background: var(--accent)"></div>
+      <div class="ds-swatch__token">2</div>
+    </div>
+    <div>
+      <div style="width: var(--space-3); height: 40px; background: var(--accent)"></div>
+      <div class="ds-swatch__token">3</div>
+    </div>
+    <div>
+      <div style="width: var(--space-4); height: 40px; background: var(--accent)"></div>
+      <div class="ds-swatch__token">4</div>
+    </div>
+    <div>
+      <div style="width: var(--space-5); height: 40px; background: var(--accent)"></div>
+      <div class="ds-swatch__token">5</div>
+    </div>
+    <div>
+      <div style="width: var(--space-6); height: 40px; background: var(--accent)"></div>
+      <div class="ds-swatch__token">6</div>
+    </div>
+    <div>
+      <div style="width: var(--space-7); height: 40px; background: var(--accent)"></div>
+      <div class="ds-swatch__token">7</div>
+    </div>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Radii &amp; elevation</p>
+  <div class="ds-row">
+    <div
+      style="
+        width: 96px;
+        height: 72px;
+        border-radius: var(--radius-sm);
+        background: var(--surface-card);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow-sm);
+      "
+    ></div>
+    <div
+      style="
+        width: 96px;
+        height: 72px;
+        border-radius: var(--radius-md);
+        background: var(--surface-card);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow-md);
+      "
+    ></div>
+    <div
+      style="
+        width: 96px;
+        height: 72px;
+        border-radius: var(--radius-lg);
+        background: var(--surface-card);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow-lg);
+      "
+    ></div>
+    <div
+      style="
+        width: 96px;
+        height: 40px;
+        border-radius: var(--radius-pill);
+        background: var(--surface-card);
+        border: 1px solid var(--line);
+      "
+    ></div>
+  </div>
+  <p class="ds-note">
+    sm 8px for controls, md 12px for tiles, lg 16px for cards, pill for badges and chips. Shadows
+    are hairline-plus-diffuse in light and a single flat drop in dark, where a border does more of
+    the separating work.
+  </p>
+</div>

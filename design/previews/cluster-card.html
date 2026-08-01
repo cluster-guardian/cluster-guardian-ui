@@ -1,0 +1,140 @@
+<!-- @dsCard group="Components" title="Cluster card" subtitle="Fleet scorecard tile, healthy and failed" -->
+<div class="ds-section">
+  <p class="ds-label">Fleet card</p>
+  <p class="ds-note">
+    One cluster on the fleet overview. A cluster that failed to scan still gets a card — an
+    unreachable cluster is itself the finding, and hiding it would make the fleet look healthier
+    than it is. Failed cards sort to the top regardless of the chosen sort.
+  </p>
+
+  <ul
+    style="
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+      gap: var(--space-4);
+    "
+  >
+    <li class="cluster-card card">
+      <a class="cluster-card__link" href="#">
+        <div class="cluster-card__head">
+          <h2 class="cluster-card__name">prod-eu</h2>
+        </div>
+        <p class="cluster-card__server mono">https://prod-eu.example.com:6443</p>
+        <div class="score">
+          <svg class="score__gauge" width="60" height="60" viewBox="0 0 60 60">
+            <circle class="score__track" cx="30" cy="30" r="26" stroke-width="8" />
+            <circle
+              class="score__meter"
+              cx="30"
+              cy="30"
+              r="26"
+              stroke-width="8"
+              stroke="var(--grade-b)"
+              stroke-dasharray="139 24"
+            />
+          </svg>
+          <div>
+            <span class="score__grade tabular" style="color: var(--grade-b)">B</span>
+            <span class="score__caption"> 85/100</span>
+          </div>
+        </div>
+        <div class="cluster-card__counts">
+          <span class="badge badge--warning"
+            ><span class="badge__icon">!</span><span class="tabular">3</span>Warning</span
+          >
+          <span class="badge badge--info"
+            ><span class="badge__icon">ℹ</span><span class="tabular">2</span>Info</span
+          >
+        </div>
+        <dl class="cluster-card__meta">
+          <div>
+            <dt>Last scan</dt>
+            <dd>4 minutes ago</dd>
+          </div>
+          <div>
+            <dt>Duration</dt>
+            <dd>2.4 s</dd>
+          </div>
+          <div>
+            <dt>Scans</dt>
+            <dd class="tabular">128</dd>
+          </div>
+        </dl>
+      </a>
+    </li>
+
+    <li class="cluster-card card">
+      <a class="cluster-card__link" href="#">
+        <div class="cluster-card__head">
+          <h2 class="cluster-card__name">staging-us</h2>
+          <span class="badge badge--critical">Scan failed</span>
+        </div>
+        <p class="cluster-card__server mono">https://staging-us.example.com:6443</p>
+        <p class="cluster-card__error">dial tcp 10.4.0.11:6443: i/o timeout</p>
+        <dl class="cluster-card__meta">
+          <div>
+            <dt>Last scan</dt>
+            <dd>2 hours ago</dd>
+          </div>
+          <div>
+            <dt>Duration</dt>
+            <dd>—</dd>
+          </div>
+          <div>
+            <dt>Scans</dt>
+            <dd class="tabular">96 (7 failed)</dd>
+          </div>
+        </dl>
+      </a>
+    </li>
+
+    <li class="cluster-card card">
+      <a class="cluster-card__link" href="#">
+        <div class="cluster-card__head">
+          <h2 class="cluster-card__name">sandbox</h2>
+        </div>
+        <p class="cluster-card__server mono">https://sandbox.example.com:6443</p>
+        <div class="score">
+          <svg class="score__gauge" width="60" height="60" viewBox="0 0 60 60">
+            <circle class="score__track" cx="30" cy="30" r="26" stroke-width="8" />
+            <circle
+              class="score__meter"
+              cx="30"
+              cy="30"
+              r="26"
+              stroke-width="8"
+              stroke="var(--grade-f)"
+              stroke-dasharray="72 91"
+            />
+          </svg>
+          <div>
+            <span class="score__grade tabular" style="color: var(--grade-f)">F</span>
+            <span class="score__caption"> 44/100</span>
+          </div>
+        </div>
+        <div class="cluster-card__counts">
+          <span class="badge badge--critical"
+            ><span class="badge__icon">✕</span><span class="tabular">3</span>Critical</span
+          >
+          <span class="badge badge--warning"
+            ><span class="badge__icon">!</span><span class="tabular">9</span>Warning</span
+          >
+        </div>
+        <dl class="cluster-card__meta">
+          <div>
+            <dt>Last scan</dt>
+            <dd>4 minutes ago</dd>
+          </div>
+          <div>
+            <dt>Duration</dt>
+            <dd>5.1 s</dd>
+          </div>
+          <div>
+            <dt>Scans</dt>
+            <dd class="tabular">128</dd>
+          </div>
+        </dl>
+      </a>
+    </li>
+  </ul>
+</div>

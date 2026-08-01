@@ -1,0 +1,55 @@
+.section {
+  padding: var(--space-4) var(--space-5);
+}
+
+.section__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  list-style: none;
+}
+
+.section__summary::-webkit-details-marker {
+  display: none;
+}
+
+.section__icon {
+  font-size: var(--text-md);
+  line-height: 1;
+}
+
+.section__title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  margin: 0;
+}
+
+.section__team {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 0.1rem 0.5rem;
+}
+
+.section__counts {
+  margin-left: auto;
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.section__chevron {
+  color: var(--ink-muted);
+  transition: transform var(--motion-fast) var(--ease);
+}
+
+.section[open] .section__chevron {
+  transform: rotate(180deg);
+}
+
+.section[open] .section__body {
+  margin-top: var(--space-2);
+}

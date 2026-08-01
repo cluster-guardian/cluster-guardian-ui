@@ -1,0 +1,27 @@
+.fleet__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.fleet__title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.fleet__sort {
+  margin-left: auto;
+}
+
+.fleet__stats {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.fleet__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: var(--space-4);
+}
