@@ -13,11 +13,14 @@ function mockFetch(handler: (url: string) => { status: number; body: unknown }) 
     'fetch',
     vi.fn(async (input: string) => {
       const { status, body } = handler(String(input));
+      // The client reads the body as text and parses it, so the stub has to
+      // serialize the way a real response would — returning String(body) gave
+      // "[object Object]" and hid that difference.
+      const text = typeof body === 'string' ? body : JSON.stringify(body);
       return {
         ok: status >= 200 && status < 300,
         status,
-        json: async () => body,
-        text: async () => String(body),
+        text: async () => text,
       } as Response;
     }),
   );

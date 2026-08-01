@@ -1,57 +1,48 @@
-import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import type { DiffResult } from '../api/types';
 import { downloadUrl } from '../api/client';
 import { useDiff, useHistory, useReport } from '../api/queries';
-import { defaultFilterState, filterReport } from '../lib/filter';
 import { formatRelative, formatTimestamp } from '../lib/format';
+import { countBySeverity } from '../lib/severity';
 import { Card } from '../components/ui/Card';
-import { ScoreGauge } from '../components/ui/ScoreGauge';
 import { StatTile } from '../components/ui/StatTile';
-import { EmptyState, ErrorState, SkeletonCard } from '../components/ui/States';
-import { SectionCard } from '../components/SectionCard';
-import { Toolbar } from '../components/Toolbar';
+import { CollapsibleCard } from '../components/ui/CollapsibleCard';
+import { ErrorState, SkeletonCard } from '../components/ui/States';
 import { TrendChart } from '../components/TrendChart';
 import { DiffPanel } from '../components/DiffPanel';
 import './ClusterPage.css';
 
 /**
- * One cluster's full report. Serves both shapes: in fleet mode the cluster name
- * comes from the route and the API paths are /api/clusters/{name}/…; in
- * single-cluster mode there is no name and the paths are /api/….
+ * A cluster's overview: how it is doing and what changed. The findings
+ * themselves live on the Issues page — this page answers "how bad is it and is
+ * it getting worse", and every area here is a link into the filtered list.
+ *
+ * Serves both shapes: in fleet mode the cluster name comes from the route and
+ * the API paths are /api/clusters/{name}/…; in single-cluster mode there is no
+ * name and the paths are /api/….
  */
 export function ClusterPage({ autoRefresh }: { autoRefresh: boolean }) {
-  const params = useParams<{ name?: string }>();
-  const cluster = params.name ?? null;
-
+  const cluster = useParams<{ name?: string }>().name ?? null;
   const report = useReport(cluster, true, autoRefresh);
   const history = useHistory(cluster, true);
   const diff = useDiff(cluster, true);
 
-  const [filters, setFilters] = useState(defaultFilterState);
-
-  const filtered = useMemo(
-    () => (report.data ? filterReport(report.data, filters) : null),
-    [report.data, filters],
-  );
+  const issuesPath = cluster ? `/clusters/${encodeURIComponent(cluster)}/issues` : '/issues';
 
   if (report.isPending) {
     return (
-      <div className="page stack">
+      <div className="stack">
         <SkeletonCard height={96} />
-        <SkeletonCard height={64} />
         <SkeletonCard height={200} />
       </div>
     );
   }
 
-  if (report.isError || !report.data || !filtered) {
+  if (report.isError || !report.data) {
     return (
-      <div className="page">
-        <Card>
-          <ErrorState error={report.error} context="Could not load the report" />
-        </Card>
-      </div>
+      <Card>
+        <ErrorState error={report.error} context="Could not load the report" />
+      </Card>
     );
   }
 
@@ -59,13 +50,7 @@ export function ClusterPage({ autoRefresh }: { autoRefresh: boolean }) {
   const s = r.summary;
 
   return (
-    <div className="page stack">
-      {cluster && (
-        <p className="cluster-page__back">
-          <Link to="/">← All clusters</Link>
-        </p>
-      )}
-
+    <div className="stack">
       <Card>
         <div className="cluster-page__head">
           <div>
@@ -88,10 +73,11 @@ export function ClusterPage({ autoRefresh }: { autoRefresh: boolean }) {
           </div>
         </div>
 
+        {/* No score gauge here — the sidebar already carries it, and two of
+            the same number on one screen invites the reader to look for a
+            difference between them. */}
         <div className="cluster-page__stats">
-          <div className="stat-tile cluster-page__score">
-            <ScoreGauge score={s.score} grade={s.grade} />
-          </div>
+          <StatTile label="Health score" value={`${s.score} (${s.grade})`} />
           <StatTile label="Critical" value={s.critical} tone="critical" />
           <StatTile label="Warnings" value={s.warnings} tone="warning" />
           <StatTile label="Info" value={s.info} tone="info" />
@@ -107,77 +93,105 @@ export function ClusterPage({ autoRefresh }: { autoRefresh: boolean }) {
 
       {diff.data && <DiffSection diff={diff.data} />}
 
-      <Toolbar
-        report={r}
-        state={filters}
-        onChange={setFilters}
-        matches={filtered.matches}
-        total={filtered.total}
-      />
-
-      {filtered.matches === 0 ? (
-        <Card>
-          <EmptyState
-            title="No findings match these filters"
-            detail="Widen the severity chips, clear the search box, or pick a different namespace."
-          />
-        </Card>
-      ) : (
-        <div className="stack">
-          {filtered.namespaces.map((ns) => (
-            <SectionCard
-              key={`ns-${ns.name}`}
-              title={ns.name}
-              icon="📦"
-              team={ns.team}
-              findings={ns.findings ?? []}
-            />
-          ))}
-          {filtered.sections.map((sec) => (
-            <SectionCard
-              key={sec.id}
-              title={sec.title}
-              icon={sec.icon}
-              findings={sec.findings ?? []}
-            />
-          ))}
+      <Card>
+        <div className="cluster-page__areas-head">
+          <h2 className="cluster-page__section-title">By area</h2>
+          <Link to={issuesPath}>All issues →</Link>
         </div>
-      )}
+
+        <div className="table-wrap">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Area</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Critical</th>
+                <th scope="col">Warning</th>
+                <th scope="col">Info</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(r.sections ?? []).map((sec) => {
+                const c = countBySeverity(sec.findings);
+                return (
+                  <tr key={sec.id}>
+                    <th scope="row">
+                      <Link to={`${issuesPath}?area=${encodeURIComponent(sec.id)}`}>
+                        <span aria-hidden="true">{sec.icon} </span>
+                        {sec.title}
+                      </Link>
+                    </th>
+                    <td>{c.total === 0 ? <span className="muted">—</span> : gradeCell(c)}</td>
+                    <td className="tabular">{c.critical || <span className="muted">0</span>}</td>
+                    <td className="tabular">{c.warning || <span className="muted">0</span>}</td>
+                    <td className="tabular">{c.info || <span className="muted">0</span>}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </Card>
     </div>
   );
 }
 
+/** A one-glyph verdict per area, so the table scans without reading numbers. */
+function gradeCell(c: { critical: number; warning: number; ok: number; total: number }) {
+  if (c.critical > 0) {
+    return (
+      <span className="badge badge--critical">
+        <span className="badge__icon" aria-hidden="true">
+          ✕
+        </span>
+        Failing
+      </span>
+    );
+  }
+  if (c.warning > 0) {
+    return (
+      <span className="badge badge--warning">
+        <span className="badge__icon" aria-hidden="true">
+          !
+        </span>
+        At risk
+      </span>
+    );
+  }
+  return (
+    <span className="badge badge--ok">
+      <span className="badge__icon" aria-hidden="true">
+        ✓
+      </span>
+      Passing
+    </span>
+  );
+}
+
 /**
- * The run-over-run diff, collapsed once it is long enough to push the findings
- * themselves below the fold. A first run after a long gap can produce dozens of
- * entries, and the report is what the page is for.
+ * The run-over-run diff, collapsed once it is long enough to push the rest of
+ * the page below the fold. A first run after a long gap can produce dozens of
+ * entries.
  */
 function DiffSection({ diff }: { diff: DiffResult }) {
-  const changes = (diff.new?.length ?? 0) + (diff.resolved?.length ?? 0);
+  const added = diff.new?.length ?? 0;
+  const resolved = diff.resolved?.length ?? 0;
+  const changes = added + resolved;
 
   return (
-    <details className="section card" open={changes > 0 && changes <= 10}>
-      <summary className="section__summary">
-        <span className="section__icon" aria-hidden="true">
-          ⇄
-        </span>
-        <h2 className="section__title">Since the previous run</h2>
-        <span className="section__counts">
-          {(diff.new?.length ?? 0) > 0 && (
-            <span className="badge badge--critical">{diff.new?.length} new</span>
-          )}
-          {(diff.resolved?.length ?? 0) > 0 && (
-            <span className="badge badge--ok">{diff.resolved?.length} resolved</span>
-          )}
+    <CollapsibleCard
+      title="Since the previous run"
+      icon="⇄"
+      defaultOpen={changes > 0 && changes <= 10}
+      summary={
+        <>
+          {added > 0 && <span className="badge badge--critical">{added} new</span>}
+          {resolved > 0 && <span className="badge badge--ok">{resolved} resolved</span>}
           {changes === 0 && <span className="badge badge--neutral">No change</span>}
-        </span>
-        <span className="section__chevron" aria-hidden="true">
-          ▾
-        </span>
-      </summary>
-      <div className="section__body">
-        <DiffPanel diff={diff} />
-      </div>
-    </details>
+        </>
+      }
+    >
+      <DiffPanel diff={diff} />
+    </CollapsibleCard>
   );
 }

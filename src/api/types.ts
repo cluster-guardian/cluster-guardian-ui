@@ -97,3 +97,65 @@ export interface ClustersResponse {
  * itself — there is no version or capability endpoint to ask.
  */
 export type ServerMode = 'fleet' | 'single';
+
+/* ---- Identity and permissions ---------------------------------------- *
+ * Mirrors internal/auth/auth.go. Roles are ordered; permissions are what the
+ * UI actually branches on, so a new role on the server needs no change here.
+ */
+
+export const ROLES = ['none', 'viewer', 'operator', 'admin'] as const;
+export type Role = (typeof ROLES)[number];
+
+export const PERMISSIONS = ['reports:read', 'teams:write', 'clusters:write'] as const;
+export type Permission = (typeof PERMISSIONS)[number];
+
+export interface Identity {
+  user?: string;
+  groups?: string[] | null;
+  role: Role;
+  anonymous: boolean;
+  permissions: Permission[] | null;
+}
+
+/**
+ * Whether this deployment has the write API at all — separate from the
+ * caller's role. An admin talking to a server started without --admin-api
+ * still cannot manage anything, and the UI must say so rather than offering
+ * buttons that 404.
+ */
+export interface Features {
+  clusters: boolean;
+  teams: boolean;
+}
+
+export interface Me {
+  identity: Identity;
+  features: Features;
+}
+
+/* ---- Team ownership --------------------------------------------------- */
+
+/** Webhook URLs come back as this; sending it back unchanged keeps the stored value. */
+export const REDACTED_URL = '***';
+
+export interface Team {
+  name: string;
+  namespaces: string[];
+  /** REDACTED_URL when one is configured, absent when not. */
+  notifyUrl?: string;
+}
+
+export interface TeamsSpec {
+  teams: Team[] | null;
+}
+
+/* ---- Cluster registration --------------------------------------------- */
+
+export interface ClusterRegistration {
+  name: string;
+  server: string;
+  bearerToken: string;
+  /** base64 PEM bundle, as it appears in a kubeconfig. */
+  caData?: string;
+  insecure?: boolean;
+}

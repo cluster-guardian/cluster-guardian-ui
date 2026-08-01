@@ -4,10 +4,8 @@ import { EmptyState } from '../components/ui/States';
 
 export function NotFound() {
   return (
-    <div className="page">
-      <Card>
-        <EmptyState title="Page not found" detail={<Link to="/">Back to the overview</Link>} />
-      </Card>
-    </div>
+    <Card>
+      <EmptyState title="Page not found" detail={<Link to="/">Back to the overview</Link>} />
+    </Card>
   );
 }

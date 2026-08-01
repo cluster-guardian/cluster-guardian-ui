@@ -2,10 +2,13 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router';
+import { SessionProvider } from './api/session';
 import { App } from './App';
 import './styles/tokens.css';
 import './styles/base.css';
 import './components/ui/ui.css';
+import './components/shell/shell.css';
+import './routes/settings/settings.css';
 import './styles/app.css';
 
 const queryClient = new QueryClient({
@@ -27,7 +30,12 @@ createRoot(root).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        {/* Identity is resolved once, above the router: every page and every
+            control reads it, and a page must not render write affordances
+            before knowing whether they are allowed. */}
+        <SessionProvider>
+          <App />
+        </SessionProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

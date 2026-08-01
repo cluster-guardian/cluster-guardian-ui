@@ -32,7 +32,23 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: `${bin} serve --fixture e2e/fixtures/run1.json --fixture e2e/fixtures/run2.json --listen 127.0.0.1:${backendPort}`,
+      // Auth is on so the suite can drive every role by setting request
+      // headers. Trusting any peer is correct *here* and nowhere else: there
+      // is no proxy in front of a test server, and the alternative is having
+      // no coverage of the RBAC rendering at all.
+      command: [
+        bin,
+        'serve',
+        '--fixture e2e/fixtures/run1.json',
+        '--fixture e2e/fixtures/run2.json',
+        `--listen 127.0.0.1:${backendPort}`,
+        '--auth-mode=proxy',
+        '--auth-trusted-proxies=any',
+        '--auth-group-role=platform=admin',
+        '--auth-group-role=sre=operator',
+        '--auth-default-role=viewer',
+        '--auth-anonymous-role=viewer',
+      ].join(' '),
       url: `http://127.0.0.1:${backendPort}/healthz`,
       reuseExistingServer: !process.env.CI,
       stdout: 'pipe',

@@ -1,44 +1,94 @@
-<!-- @dsCard group="Components" title="Toolbar & states" subtitle="Filters, empty, error, loading" -->
+<!-- @dsCard group="Components" title="Filter rail & states" subtitle="Faceted filters, diff, empty, error, loading" -->
 <div class="ds-section">
-  <p class="ds-label">Filter toolbar</p>
+  <p class="ds-label">Faceted filter rail</p>
   <p class="ds-note">
-    One row above the content: severity chips, search, namespace, team. It sticks to the top of the
-    viewport on desktop and unsticks below 640px, where the controls go full-width instead. The
-    match count is a live region, so filtering announces its result.
+    Every facet value carries its result count, computed against the <em>other</em> facets. That is
+    what makes the numbers trustworthy: each count is exactly how many results selecting it will
+    produce, so a facet never advertises a number that clicking it cannot deliver. Severity is the
+    exception — its counts ignore the severity selection, or turning one off would zero its own
+    count and it could never be turned back on.
   </p>
-  <div class="toolbar card" style="position: static">
-    <div class="toolbar__row">
-      <div class="toolbar__chips">
-        <button class="chip chip--critical" aria-pressed="true">
-          ✕ Critical <span class="tabular">1</span>
-        </button>
-        <button class="chip chip--warning" aria-pressed="true">
-          ! Warning <span class="tabular">10</span>
-        </button>
-        <button class="chip chip--info" aria-pressed="true">
-          ℹ Info <span class="tabular">11</span>
-        </button>
-        <button class="chip chip--ok" aria-pressed="false">
-          ✓ OK <span class="tabular">0</span>
-        </button>
+  <p class="ds-note">
+    Selection shows as a checkbox glyph, not a color change: it has to be visible without relying on
+    hue. A facet with no values is omitted entirely rather than rendered as an empty heading.
+  </p>
+
+  <div style="max-width: 16rem">
+    <div class="rail">
+      <div class="rail__head">
+        <h2 class="rail__heading">Filters</h2>
+        <button class="rail__clear">Clear (2)</button>
       </div>
-      <label class="toolbar__field">
-        <input type="search" class="toolbar__search" placeholder="Search findings…" />
+      <label class="rail__search">
+        <input type="search" placeholder="Search issues…" />
       </label>
-      <label class="toolbar__field">
-        <select class="toolbar__select">
-          <option>All namespaces</option>
-        </select>
-      </label>
-      <label class="toolbar__field">
-        <select class="toolbar__select">
-          <option>All teams</option>
-        </select>
-      </label>
+
+      <section class="rail__group">
+        <h3 class="rail__group-title">Severity</h3>
+        <ul class="rail__list">
+          <li>
+            <button class="rail__option" aria-pressed="true">
+              <span class="rail__check rail__check--on">✓</span>
+              <span class="rail__sev rail__sev--critical">✕</span>
+              <span class="rail__label">Critical</span>
+              <span class="rail__count tabular">1</span>
+            </button>
+          </li>
+          <li>
+            <button class="rail__option" aria-pressed="true">
+              <span class="rail__check rail__check--on">✓</span>
+              <span class="rail__sev rail__sev--warning">!</span>
+              <span class="rail__label">Warning</span>
+              <span class="rail__count tabular">10</span>
+            </button>
+          </li>
+          <li>
+            <button class="rail__option" aria-pressed="false">
+              <span class="rail__check"></span>
+              <span class="rail__sev rail__sev--info">ℹ</span>
+              <span class="rail__label">Info</span>
+              <span class="rail__count tabular">11</span>
+            </button>
+          </li>
+          <li>
+            <button class="rail__option" aria-pressed="false">
+              <span class="rail__check"></span>
+              <span class="rail__sev rail__sev--ok">✓</span>
+              <span class="rail__label">OK</span>
+              <span class="rail__count tabular">0</span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
+      <section class="rail__group">
+        <h3 class="rail__group-title">Area</h3>
+        <ul class="rail__list">
+          <li>
+            <button class="rail__option" aria-pressed="true">
+              <span class="rail__check rail__check--on">✓</span>
+              <span class="rail__label">workloads</span>
+              <span class="rail__count tabular">15</span>
+            </button>
+          </li>
+          <li>
+            <button class="rail__option" aria-pressed="false">
+              <span class="rail__check"></span>
+              <span class="rail__label">security</span>
+              <span class="rail__count tabular">7</span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
+      <section class="rail__group">
+        <h3 class="rail__group-title">Compliance</h3>
+        <label class="rail__switch">
+          <input type="checkbox" />
+          Mapped to a control only
+        </label>
+      </section>
     </div>
-    <p class="toolbar__count">
-      Showing <span class="tabular">22</span> of <span class="tabular">22</span> findings
-    </p>
   </div>
 </div>
 
@@ -58,13 +108,6 @@
             <div>
               <p>2 privileged containers</p>
               <p class="diff__location">Security</p>
-            </div>
-          </li>
-          <li class="diff__item">
-            <span class="diff__severity diff__severity--warning">!</span>
-            <div>
-              <p>1 Pod missing resource requests</p>
-              <p class="diff__location">namespace payments · payments-team</p>
             </div>
           </li>
         </ul>
@@ -105,12 +148,13 @@
   </div>
   <div class="card" style="padding: var(--space-2)">
     <div class="state">
-      <p class="state__title">No findings match these filters</p>
+      <p class="state__title">No issues match these filters</p>
       <p class="state__detail">
-        Widen the severity chips, clear the search box, or pick a different namespace.
+        Widen the severity selection, clear the search box, or drop a facet.
       </p>
     </div>
   </div>
+  <p class="settings__notice"><span>🔒</span> Requires clusters:write. Your role is viewer.</p>
   <div class="card" style="padding: var(--space-2)">
     <div class="state"><div class="spinner"></div></div>
   </div>

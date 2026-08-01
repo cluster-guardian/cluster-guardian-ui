@@ -29,10 +29,10 @@ export function ThemeToggle() {
   }, [theme]);
 
   return (
-    <label className="app-header__switch">
+    <label>
       <span className="visually-hidden">Color theme</span>
       <select
-        className="toolbar__select"
+        className="select"
         value={theme}
         onChange={(e) => setTheme(e.target.value as Theme)}
         aria-label="Color theme"

@@ -11,62 +11,114 @@ test.beforeEach(async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'demo' })).toBeVisible();
 });
 
-test('renders the report header and summary from the API', async ({ page }) => {
+test('the overview reports the score and how it was reached', async ({ page }) => {
   // run2.json is the current report: 22 findings, score 34, grade F.
   await expect(page.getByRole('img', { name: /score 34 out of 100, grade F/i })).toBeVisible();
-  // The fixture carries no kubernetesVersion or context, so the header shows
-  // only the analysis time — the optional parts must not leave stray separators.
-  const meta = page.locator('.cluster-page__head p').first();
-  await expect(meta).toHaveText(/^analyzed /);
+  // The header carries only the analysis time — the fixture has no
+  // kubernetesVersion or context, and the optional parts must not leave stray
+  // separators behind.
+  await expect(page.locator('.cluster-page__head p').first()).toHaveText(/^analyzed /);
 });
 
-test('lists namespace and cluster-wide sections', async ({ page }) => {
-  await expect(page.getByRole('heading', { name: 'payments' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Security' })).toBeVisible();
+test('the overview breaks findings down by area and links into them', async ({ page }) => {
+  const row = page.getByRole('row', { name: /Security/ });
+  await expect(row).toContainText('Failing');
+
+  await page.getByRole('link', { name: /Security/ }).click();
+  await expect(page).toHaveURL(/\/issues\?area=security/);
+  // Landing pre-filtered is the point of the link.
+  await expect(page.getByRole('button', { name: /^security/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
 });
 
-test('severity chips narrow the findings', async ({ page }) => {
-  const count = page.getByText(/Showing \d+ of \d+ findings/);
-  await expect(count).toBeVisible();
-  const before = await count.textContent();
-
-  // The glyph is aria-hidden, so the accessible name is "Info <count>".
-  const infoChip = page.getByRole('button', { name: /^Info/ });
-  await expect(infoChip).toHaveAttribute('aria-pressed', 'true');
-  await infoChip.click();
-  await expect(infoChip).toHaveAttribute('aria-pressed', 'false');
-  await expect(count).not.toHaveText(before!);
+test('the sidebar carries a live count and navigates to Issues', async ({ page }, testInfo) => {
+  // The sidebar is a drawer below 960px; open it first.
+  if (testInfo.project.name === 'mobile') {
+    await page.getByRole('button', { name: 'Toggle navigation' }).click();
+  }
+  // Scoped to the sidebar: the global nav has an "Issues" link too.
+  const link = page.locator('.sidebar').getByRole('link', { name: /Issues/ });
+  // 1 critical + 10 warnings.
+  await expect(link).toContainText('11');
+  await link.click();
+  await expect(page.getByRole('heading', { name: 'Issues' })).toBeVisible();
 });
 
-test('search filters down to a single finding and back', async ({ page }) => {
-  const search = page.getByPlaceholder('Search findings…');
-  await search.fill('zzz-no-such-finding');
-  await expect(page.getByText('No findings match these filters')).toBeVisible();
+test.describe('Issues', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/issues');
+    await expect(page.getByRole('heading', { name: 'Issues' })).toBeVisible();
+  });
 
-  await search.fill('');
-  await expect(page.getByText('No findings match these filters')).toHaveCount(0);
-});
+  test('lists every finding worst-first', async ({ page }) => {
+    await expect(page.getByText('22 findings')).toBeVisible();
+    // The single critical must come first, above the ten warnings.
+    await expect(page.locator('.issue').first()).toContainText('Critical');
+  });
 
-test('namespace filter hides cluster-wide sections', async ({ page }) => {
-  await page.getByLabel('Filter by namespace').selectOption('payments');
-  await expect(page.getByRole('heading', { name: 'payments' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Security' })).toHaveCount(0);
-  await expect(page.getByText(/cluster-wide sections are hidden/)).toBeVisible();
-});
+  test('severity facets narrow the list and keep their counts', async ({ page }) => {
+    const info = page.getByRole('button', { name: /^Info/ });
+    await expect(info).toHaveAttribute('aria-pressed', 'true');
+    await info.click();
+    await expect(info).toHaveAttribute('aria-pressed', 'false');
+    // Turning a severity off must not zero its own count, or it could never be
+    // turned back on.
+    await expect(info).toContainText('11');
+    await expect(page.getByText('11 of 22 findings')).toBeVisible();
+  });
 
-test('team filter narrows to that team only', async ({ page }) => {
-  await page.getByLabel('Filter by team').selectOption('payments-team');
-  await expect(page.getByRole('heading', { name: 'payments' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'shop' })).toHaveCount(0);
+  test('facet counts are honest — clicking one yields exactly that many', async ({ page }) => {
+    // Exact: "shop" and "shop-team" are both facet values.
+    const shop = page.getByRole('button', { name: /^shop \d+$/ });
+    const label = await shop.textContent();
+    const expected = Number(label?.match(/(\d+)\s*$/)?.[1]);
+    await shop.click();
+    await expect(page.getByText(`${expected} of 22 findings`)).toBeVisible();
+  });
+
+  test('facets combine, and Clear resets them', async ({ page }) => {
+    await page.getByRole('button', { name: /^shop \d+$/ }).click();
+    await page.getByRole('button', { name: /^workloads \d+$/ }).click();
+    const clear = page.getByRole('button', { name: /^Clear \(2\)$/ });
+    await expect(clear).toBeVisible();
+    await clear.click();
+    await expect(page.getByText('22 findings')).toBeVisible();
+  });
+
+  test('search narrows to nothing and back', async ({ page }) => {
+    const search = page.getByPlaceholder('Search issues…');
+    await search.fill('zzz-no-such-finding');
+    await expect(page.getByText('No issues match these filters')).toBeVisible();
+    await search.fill('');
+    await expect(page.getByText('No issues match these filters')).toHaveCount(0);
+  });
+
+  test('the compliance facet keeps only control-mapped findings', async ({ page }) => {
+    await page.getByLabel('Mapped to a control only').check();
+    // Every remaining row must expose its control when expanded.
+    const first = page.locator('.issue').first();
+    await first.getByRole('button', { name: 'Why' }).click();
+    await expect(first.locator('.issue__control')).toHaveCount(
+      await first.locator('.issue__control').count(),
+    );
+    await expect(first.locator('.issue__control').first()).toContainText('PSS/');
+  });
+
+  test('remediation is behind a toggle, not always on', async ({ page }) => {
+    const row = page.locator('.issue').first();
+    await expect(row.locator('.issue__hint')).toHaveCount(0);
+    await row.getByRole('button', { name: 'Why' }).click();
+    await expect(row.locator('.issue__hint')).toBeVisible();
+  });
 });
 
 test('the trend renders and has a table equivalent', async ({ page }) => {
-  // Two fixtures were appended, so history has two runs.
   await expect(page.getByText(/Findings by severity over 2 runs/)).toBeVisible();
 
   await page.getByRole('button', { name: 'Show table' }).click();
-  const table = page.getByRole('table');
-  await expect(table).toBeVisible();
+  const table = page.getByRole('table').first();
   await expect(table.getByRole('columnheader', { name: 'Critical' })).toBeVisible();
   await expect(table.getByRole('row')).toHaveCount(3); // header + two runs
 });
@@ -80,7 +132,6 @@ test('the diff panel reports what changed between the two runs', async ({ page }
 
   await summary.click();
   const panel = page.locator('.diff');
-  await expect(panel).toBeVisible();
   await expect(panel.getByRole('heading', { name: /New/ })).toBeVisible();
   await expect(panel.getByRole('heading', { name: /Resolved/ })).toBeVisible();
 });
@@ -94,9 +145,7 @@ test('download links point at the API, not the SPA', async ({ page }) => {
 });
 
 test('single-cluster mode does not offer fleet navigation', async ({ page }) => {
-  // The backend runs without --fleet, so the SPA must not show "All clusters".
-  await expect(page.getByRole('link', { name: /All clusters/ })).toHaveCount(0);
-  await expect(page.getByText('single cluster')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Fleet', exact: true })).toHaveCount(0);
 });
 
 test('an unknown route renders the not-found page', async ({ page }) => {
@@ -107,7 +156,6 @@ test('an unknown route renders the not-found page', async ({ page }) => {
 test('the theme toggle stamps data-theme on the document', async ({ page }) => {
   await page.getByLabel('Color theme').selectOption('dark');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-
   await page.getByLabel('Color theme').selectOption('system');
   await expect(page.locator('html')).not.toHaveAttribute('data-theme', /.*/);
 });

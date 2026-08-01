@@ -53,7 +53,7 @@ export function FleetPage({ autoRefresh }: { autoRefresh: boolean }) {
 
   if (clusters.isPending) {
     return (
-      <div className="page stack">
+      <div className="stack">
         <SkeletonCard height={88} />
         <SkeletonCard height={220} />
       </div>
@@ -62,23 +62,21 @@ export function FleetPage({ autoRefresh }: { autoRefresh: boolean }) {
 
   if (clusters.isError) {
     return (
-      <div className="page">
-        <Card>
-          <ErrorState error={clusters.error} context="Could not load the fleet" />
-        </Card>
-      </div>
+      <Card>
+        <ErrorState error={clusters.error} context="Could not load the fleet" />
+      </Card>
     );
   }
 
   return (
-    <div className="page stack">
+    <div className="stack">
       <Card>
         <div className="fleet__head">
           <h1 className="fleet__title">Fleet</h1>
           <label className="fleet__sort">
             <span className="visually-hidden">Sort clusters</span>
             <select
-              className="toolbar__select"
+              className="select"
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
             >

@@ -1,7 +1,27 @@
-.app-footer {
-  text-align: center;
-  color: var(--ink-muted);
-  font-size: var(--text-sm);
-  padding: var(--space-5) var(--space-4);
-  border-top: 1px solid var(--line);
+/*
+ * Compact density tightens the repeated rows — issue cards, table rows, finding
+ * lists — and leaves headings, cards and controls alone. Squeezing everything
+ * makes a page smaller without making it hold more.
+ */
+:root[data-density='compact'] {
+  --space-3: 0.55rem;
+  --space-4: 0.7rem;
+  --space-5: 1rem;
+}
+
+:root[data-density='compact'] .issue {
+  padding: var(--space-2) var(--space-3);
+}
+
+:root[data-density='compact'] .issue__meta {
+  margin-top: 0;
+}
+
+:root[data-density='compact'] .table th,
+:root[data-density='compact'] .table td {
+  padding: var(--space-2) var(--space-3);
+}
+
+:root[data-density='compact'] .finding {
+  padding: var(--space-2) 0;
 }

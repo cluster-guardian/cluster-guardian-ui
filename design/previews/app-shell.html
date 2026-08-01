@@ -1,0 +1,198 @@
+<!-- @dsCard group="Components" title="App shell & RBAC" subtitle="Global nav, sidebar, breadcrumbs, permission notices" -->
+<style>
+  /*
+   * This card documents the desktop layout, but the card frame is narrower
+   * than the 960px breakpoint — without these overrides the media query would
+   * hide the nav links and slide the sidebar off-canvas, and the card would
+   * demonstrate nothing. The mobile behaviour is described in prose below
+   * rather than shown, since a card cannot be two widths at once.
+   */
+  .globalnav__links {
+    display: flex !important;
+  }
+  .usermenu__text {
+    display: flex !important;
+  }
+  .ds-shell-demo .sidebar {
+    position: static !important;
+    transform: none !important;
+    height: auto !important;
+    width: auto !important;
+    box-shadow: none !important;
+  }
+</style>
+
+<div class="ds-section">
+  <p class="ds-label">Global nav</p>
+  <p class="ds-note">
+    A short bar: product mark, the handful of top-level destinations, and who you are. The active
+    tab is marked with a rule beneath it, not only a color change, so it survives a monochrome or
+    forced-colors rendering. Below 960px these links move into the drawer — otherwise Settings would
+    be unreachable on a phone, since the burger opens the contextual sidebar, not this bar.
+  </p>
+
+  <header
+    class="globalnav"
+    style="position: static; border: 1px solid var(--line); border-radius: var(--radius-lg)"
+  >
+    <a class="globalnav__brand" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24">
+        <path
+          d="M12 2.5 20 5.5v6.2c0 5-3.4 9.3-8 10.8-4.6-1.5-8-5.8-8-10.8V5.5z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linejoin="round"
+        />
+        <path
+          d="m8.4 12.2 2.6 2.6 4.6-5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span>Cluster Guardian</span>
+    </a>
+    <nav class="globalnav__links">
+      <a class="globalnav__link" href="#">Fleet</a>
+      <a class="globalnav__link active" href="#" aria-current="page">Issues</a>
+      <a class="globalnav__link" href="#">Settings</a>
+    </nav>
+    <div class="globalnav__actions">
+      <select class="select">
+        <option>System</option>
+      </select>
+      <div class="usermenu">
+        <span class="usermenu__avatar">AS</span>
+        <span class="usermenu__text">
+          <span class="usermenu__name">astriletskyi</span>
+          <span class="usermenu__role usermenu__role--admin">admin</span>
+        </span>
+      </div>
+    </div>
+  </header>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Identity</p>
+  <p class="ds-note">
+    Anonymous is shown rather than hidden: "you are not signed in" explains a missing button far
+    better than the button simply not being there. The role is coloured only as a secondary cue —
+    the word itself carries it.
+  </p>
+  <div class="ds-row">
+    <div class="usermenu">
+      <span class="usermenu__avatar">AS</span>
+      <span class="usermenu__text">
+        <span class="usermenu__name">astriletskyi</span>
+        <span class="usermenu__role usermenu__role--admin">admin</span>
+      </span>
+    </div>
+    <div class="usermenu">
+      <span class="usermenu__avatar">BJ</span>
+      <span class="usermenu__text">
+        <span class="usermenu__name">bo.jones</span>
+        <span class="usermenu__role usermenu__role--operator">operator</span>
+      </span>
+    </div>
+    <div class="usermenu">
+      <span class="usermenu__avatar">?</span>
+      <span class="usermenu__text">
+        <span class="usermenu__name">Anonymous</span>
+        <span class="usermenu__role">viewer</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Sidebar &amp; breadcrumbs</p>
+  <p class="ds-note">
+    Contextual navigation for whatever the page is about. Items carry live counts — "Issues 11" is
+    worth more than "Issues" — and the active item takes a left rule that is transparent when
+    inactive, so the label never shifts.
+  </p>
+
+  <div
+    class="ds-shell-demo"
+    style="
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      gap: var(--space-4);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    "
+  >
+    <aside class="sidebar" style="position: static; height: auto">
+      <div class="sidebar__header">
+        <div class="score">
+          <svg class="score__gauge" width="52" height="52" viewBox="0 0 52 52">
+            <circle class="score__track" cx="26" cy="26" r="23" stroke-width="7" />
+            <circle
+              class="score__meter"
+              cx="26"
+              cy="26"
+              r="23"
+              stroke-width="7"
+              stroke="var(--grade-f)"
+              stroke-dasharray="49 96"
+            />
+          </svg>
+          <div>
+            <span class="score__grade tabular" style="color: var(--grade-f)">F</span>
+            <span class="score__caption"> 34/100</span>
+            <div class="score__caption">Health score</div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar__section">
+        <ul>
+          <li><a class="sidebar__link" href="#">Overview</a></li>
+          <li>
+            <a class="sidebar__link sidebar__link--active" href="#">
+              Issues <span class="sidebar__badge sidebar__badge--critical">11</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar__section">
+        <p class="sidebar__title">Settings</p>
+        <ul>
+          <li><a class="sidebar__link" href="#">Preferences</a></li>
+          <li><a class="sidebar__link" href="#">Access</a></li>
+          <li><a class="sidebar__link" href="#">Clusters</a></li>
+          <li><a class="sidebar__link" href="#">Teams</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div style="padding: var(--space-4) var(--space-4) var(--space-5) 0">
+      <ol class="crumbs">
+        <li class="crumbs__item"><a href="#">Fleet</a><span class="crumbs__sep">›</span></li>
+        <li class="crumbs__item"><a href="#">prod-eu</a><span class="crumbs__sep">›</span></li>
+        <li class="crumbs__item"><span aria-current="page">Issues</span></li>
+      </ol>
+      <p class="ds-note">Page content sits here.</p>
+    </div>
+  </div>
+</div>
+
+<div class="ds-section">
+  <p class="ds-label">Permission notices</p>
+  <p class="ds-note">
+    A control the caller cannot use is replaced by a notice saying <em>why</em>, never by a greyed
+    button. "Your role is viewer" and "this server has no write API" call for completely different
+    next steps, and a disabled control says neither.
+  </p>
+  <p class="settings__notice"><span>🔒</span> Requires clusters:write. Your role is viewer.</p>
+  <p class="settings__notice">
+    <span>🔒</span> This request is anonymous — sign in through the proxy in front of
+    cluster-guardian.
+  </p>
+  <p class="settings__notice">
+    <span>🔒</span> This server was started without --admin-api, so it cannot make this change.
+  </p>
+</div>

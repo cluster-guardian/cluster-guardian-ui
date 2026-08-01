@@ -1,110 +1,101 @@
-<!-- @dsCard group="Components" title="Findings & sections" subtitle="Finding row, collapsible section card" -->
+<!-- @dsCard group="Components" title="Issue rows" subtitle="Severity, location, remediation, controls" -->
 <div class="ds-section">
-  <p class="ds-label">Finding row</p>
+  <p class="ds-label">Issue row</p>
   <p class="ds-note">
-    The report's atom. Reading order is severity → message → the object it is about → the
-    remediation hint → the compliance controls it maps to. Everything after the message is optional;
-    the row must not leave stray separators when they are absent.
+    The report's atom, as the Issues page shows it. Reading order is severity → the message → where
+    it came from. Remediation and compliance controls sit behind “Why”, so a list of two hundred
+    findings stays scannable and detail is one click away rather than always on.
   </p>
-  <div class="card" style="padding: var(--space-4) var(--space-5)">
-    <ul class="findings">
-      <li class="finding">
-        <span class="badge badge--critical"><span class="badge__icon">✕</span>Critical</span>
-        <div class="finding__body">
-          <p class="finding__message">2 privileged containers</p>
-          <p class="finding__hint">
-            Privileged containers have full access to the host. Replace with specific capabilities.
+  <ul class="issues__list">
+    <li class="issue">
+      <div class="issue__main">
+        <span class="issue__sev issue__sev--critical"><span>✕</span>Critical</span>
+        <div class="issue__body">
+          <p class="issue__message">2 privileged containers</p>
+          <p class="issue__meta"><span class="issue__location">Security</span></p>
+        </div>
+        <button class="issue__toggle" aria-expanded="false">Why</button>
+      </div>
+    </li>
+
+    <li class="issue">
+      <div class="issue__main">
+        <span class="issue__sev issue__sev--warning"><span>!</span>Warning</span>
+        <div class="issue__body">
+          <p class="issue__message">Deployment "web" uses :latest tag</p>
+          <p class="issue__meta">
+            <span class="issue__location">shop</span>
+            <span class="mono">deployment/web</span>
+            <span class="issue__team">shop-team</span>
           </p>
-          <ul class="finding__controls">
-            <li class="finding__control mono">PSS/baseline:privileged</li>
-          </ul>
         </div>
-      </li>
-      <li class="finding">
-        <span class="badge badge--warning"><span class="badge__icon">!</span>Warning</span>
-        <div class="finding__body">
-          <p class="finding__message">Deployment "web" uses :latest tag</p>
-          <p class="finding__object mono">deployment/web</p>
-          <p class="finding__hint">
-            Pin images to an immutable tag or digest for reproducible deploys and clean rollbacks.
+        <button class="issue__toggle" aria-expanded="true">Less</button>
+      </div>
+      <div class="issue__detail">
+        <p class="issue__hint">
+          Pin images to an immutable tag or digest for reproducible deploys and clean rollbacks.
+        </p>
+        <ul class="issue__controls">
+          <li class="issue__control mono">PSS/baseline:privileged</li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="issue">
+      <div class="issue__main">
+        <span class="issue__sev issue__sev--info"><span>ℹ</span>Info</span>
+        <div class="issue__body">
+          <p class="issue__message">1 container without liveness probes</p>
+          <p class="issue__meta">
+            <span class="issue__location">payments</span>
+            <span class="issue__team">payments-team</span>
           </p>
         </div>
-      </li>
-      <li class="finding">
-        <span class="badge badge--info"><span class="badge__icon">ℹ</span>Info</span>
-        <div class="finding__body">
-          <p class="finding__message">1 container without liveness probes</p>
+      </div>
+    </li>
+
+    <li class="issue">
+      <div class="issue__main">
+        <span class="issue__sev issue__sev--ok"><span>✓</span>OK</span>
+        <div class="issue__body">
+          <p class="issue__message">All namespaces have NetworkPolicies</p>
+          <p class="issue__meta"><span class="issue__location">Security</span></p>
         </div>
-      </li>
-      <li class="finding">
-        <span class="badge badge--ok"><span class="badge__icon">✓</span>OK</span>
-        <div class="finding__body">
-          <p class="finding__message">All namespaces have NetworkPolicies</p>
-        </div>
-      </li>
-    </ul>
-  </div>
+      </div>
+    </li>
+  </ul>
 </div>
 
 <div class="ds-section">
-  <p class="ds-label">Section card</p>
+  <p class="ds-label">Collapsible card</p>
   <p class="ds-note">
-    One per report section or namespace, built on <code>&lt;details&gt;</code> so open/closed state,
-    keyboard handling and browser find-in-page come from the platform. The header carries
-    per-severity counts so a collapsed card still says how bad it is.
+    Built on <code>&lt;details&gt;</code> so open/closed state, keyboard handling and browser
+    find-in-page come from the platform. The header keeps its badges visible while collapsed — a
+    section that hides how bad it is until you open it is not worth collapsing.
   </p>
-
-  <details class="section card" open>
-    <summary class="section__summary">
-      <span class="section__icon">🔒</span>
-      <h2 class="section__title">Security</h2>
-      <span class="section__counts">
-        <span class="badge badge--critical"
-          ><span class="badge__icon">✕</span><span class="tabular">1</span>Critical</span
-        >
-        <span class="badge badge--warning"
-          ><span class="badge__icon">!</span><span class="tabular">3</span>Warning</span
-        >
+  <details class="collapsible card" open>
+    <summary class="collapsible__summary">
+      <span class="collapsible__icon">⇄</span>
+      <h2 class="collapsible__title">Since the previous run</h2>
+      <span class="collapsible__badges">
+        <span class="badge badge--critical">19 new</span>
+        <span class="badge badge--ok">12 resolved</span>
       </span>
-      <span class="section__chevron">▾</span>
+      <span class="collapsible__chevron">▾</span>
     </summary>
-    <div class="section__body">
-      <ul class="findings">
-        <li class="finding">
-          <span class="badge badge--warning"><span class="badge__icon">!</span>Warning</span>
-          <div class="finding__body">
-            <p class="finding__message">2 containers running as root</p>
-            <p class="finding__hint">
-              Set securityContext.runAsNonRoot: true and a non-zero runAsUser.
-            </p>
-          </div>
-        </li>
-      </ul>
+    <div class="collapsible__body">
+      <p class="ds-note">The run-over-run diff goes here.</p>
     </div>
   </details>
 
-  <details class="section card">
-    <summary class="section__summary">
-      <span class="section__icon">📦</span>
-      <h2 class="section__title">payments</h2>
-      <span class="section__team">payments-team</span>
-      <span class="section__counts">
-        <span class="badge badge--info"
-          ><span class="badge__icon">ℹ</span><span class="tabular">4</span>Info</span
-        >
+  <details class="collapsible card">
+    <summary class="collapsible__summary">
+      <span class="collapsible__icon">⇄</span>
+      <h2 class="collapsible__title">Since the previous run</h2>
+      <span class="collapsible__badges">
+        <span class="badge badge--neutral">No change</span>
       </span>
-      <span class="section__chevron">▾</span>
-    </summary>
-  </details>
-
-  <details class="section card">
-    <summary class="section__summary">
-      <span class="section__icon">🚀</span>
-      <h2 class="section__title">GitOps</h2>
-      <span class="section__counts">
-        <span class="badge badge--ok"><span class="badge__icon">✓</span>OK</span>
-      </span>
-      <span class="section__chevron">▾</span>
+      <span class="collapsible__chevron">▾</span>
     </summary>
   </details>
 </div>
