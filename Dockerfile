@@ -1,7 +1,7 @@
 # Build the SPA, then serve it from nginx. The image carries no Node runtime:
 # the output is static files plus a proxy that forwards /api, /healthz and
 # /metrics to a cluster-guardian instance.
-FROM node:22-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /app
 
 # Copy the manifests first so `npm ci` is cached until a dependency changes.
