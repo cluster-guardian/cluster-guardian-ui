@@ -16,7 +16,7 @@ RUN npm run build
 # as non-root with a read-only root filesystem — it fails opening /run/nginx.pid
 # — and its /etc/nginx/conf.d is root-owned, so the template entrypoint silently
 # skips rendering. Both were verified before choosing this base.
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.30-alpine
 
 # CG_UPSTREAM is substituted into the proxy config at container start, so one
 # image works against any backend address.
