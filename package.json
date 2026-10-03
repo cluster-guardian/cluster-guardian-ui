@@ -26,7 +26,7 @@
     "design:build": "node scripts/build-design-bundle.mjs"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.62.7",
+    "@tanstack/react-query": "^5.104.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^8.3.0",
